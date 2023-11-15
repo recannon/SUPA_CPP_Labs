@@ -27,19 +27,26 @@ int main(){
     << z << std::endl << std::endl;
 
     //2 (III)
+    std::cout << "2 (III)" << std::endl;
+
     double inp1, inp2;
 
     std::cout << "Please enter the x and y components of a vector:\n"
     << "Vx = "; 
-    std::cin >> inp1; 
-    std::cout << "\nVy = ";
+    std::cin >> inp1;
+    std::cout << "Vy = ";
     std::cin >> inp2;
-    std::cout << std::endl;
 
     double magnitude = vectorMag(inp1, inp2);
 
-    std::cout << "2 (III)" << std::endl;
+    std::cout << "The magnitude of the vector is "
+    << magnitude << std::endl;
 
     std::cout << std::endl << std::endl;
     return 0;
 }
+
+double vectorMag(double vx, double vy){
+    return pow((vx*vx + vy*vy),0.5);
+}
+
