@@ -4,42 +4,24 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include <fstream>
 
-double vectorMag(double, double);
+int main() {
 
-int main(){
+    std::ifstream data;
+    data.open("../input2D_float.txt");
 
-    // 2 I
-    std::cout << "2 (I)" << std::endl;
-    std::cout << "Hello World! \n" << std::endl;
+    int line;
+    while (!data.eof()){
+        if (!data.eof()){
+            line++;
+        }
+    }
 
-    // 2 II
-    double x, y;
-    x = 2.3;
-    y = 4.5;
+    std::cout << line << std::endl;
 
-    std::vector<double> v{x, y};
 
-    double z = pow((v[0]*v[0] + v[1]*v[1]),0.5);
 
-    std::cout << "2 (II)" << std::endl;
-    std::cout << "The magnitude of vector (x,y) is "
-    << z << std::endl << std::endl;
 
-    //2 (III)
-    double inp1, inp2;
-
-    std::cout << "Please enter the x and y components of a vector:\n"
-    << "Vx = "; 
-    std::cin >> inp1; 
-    std::cout << "\nVy = ";
-    std::cin >> inp2;
-    std::cout << std::endl;
-
-    double magnitude = vectorMag(inp1, inp2);
-
-    std::cout << "2 (III)" << std::endl;
-
-    std::cout << std::endl << std::endl;
-    return 0;
+    std::cout << "\n\n";
 }
