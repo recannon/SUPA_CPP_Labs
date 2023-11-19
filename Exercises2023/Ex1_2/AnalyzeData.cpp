@@ -6,20 +6,22 @@
 #include <cmath>
 #include <fstream>
 #include <cstdlib>
+#include <numeric>
 #include "CustomFunctions.h"
+
 
 int main() {
     //Defines global variables
     int line = 0;
-    std::vector<double> y;
-    std::vector<double> x;
-    std::vector<double> z;
-    std::string p_m;
+    std::vector<double> x,y,z,fit;
+    std::string p_m, lobf;
     std::ifstream data_file;
+    std::ofstream output_file;
 
     data_file.open("/workspaces/SUPA_CPP_Labs/Exercises2023/Ex1_2/input2D_float.txt", std::ios::in);
     if (data_file.fail()) {
         std::cout << "Cannot find file \n";
+        return 0;
         }
     else {
         std::cout << "File found\n";
@@ -34,7 +36,7 @@ int main() {
         double x_i, y_i;
 
         // Loads data into temporary variables, ignoring the comma, and saves into arrays
-        read_data(data_file, x, y, -1);
+        readData(data_file, x, y, -1);
         }
 
     std::cout << "Would you like to print the arrays(p), or calculate and print their magnitudes(m)?\n";
@@ -51,17 +53,17 @@ int main() {
             std::cin >> n;
             // Outputs data arrays
             std::cout << "X data:\n";
-            print_vector(x, n);
+            printVector(x, n);
             std::cout << "Y data:\n";
-            print_vector(y, n);
+            printVector(y, n);
             break;
         }
         //Mag
         else if (p_m.at(0) == 'm') {
             //Calculates vector of magnitudes
-            z = vector_mag(x,y);
+            z = vectorMag(x,y);
             std::cout << "Magnitudes of data:\n";
-            print_vector(z,-1);
+            printVector(z,-1);
             break;
         }
         else {
@@ -69,9 +71,15 @@ int main() {
         }
     }
 
+    fit = leastSquareRegression(x,y);
 
+    lobf = "y = " + std::to_string(fit[0]) + "x + " + std::to_string(fit[1]);
 
+    std::cout << "\nLine of best fit for the data is:\n" << lobf << std::endl;
 
+    //Writing to file
+    output_file.open("/workspaces/SUPA_CPP_Labs/Exercises2023/Ex1_2/LOBF.txt", std::ios::out);
+    output_file << lobf;
 
     std::cout << "\n\n";
     return 0;

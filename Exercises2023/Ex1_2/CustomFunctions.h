@@ -3,7 +3,9 @@
 #include <cmath>
 #include <fstream>
 #include <cstdlib>
+#include <numeric>
 
-void read_data(std::ifstream&, std::vector<double>&, std::vector<double>&, int);
-void print_vector(std::vector<double>, int);
-std::vector<double> vector_mag(std::vector<double>, std::vector<double>);
+void readData(std::ifstream&, std::vector<double>&, std::vector<double>&, int);
+void printVector(std::vector<double>, int);
+std::vector<double> vectorMag(std::vector<double>, std::vector<double>);
+std::vector<double> leastSquareRegression(std::vector<double>, std::vector<double>);
