@@ -13,30 +13,32 @@
 int main() {
     //Defines global variables
     int line = 0;
-    std::vector<double> x,y,z,fit;
+    std::vector<double> x,y,z,fit, x_err, y_err;
     std::string p_m, lobf;
-    std::ifstream data_file;
+    std::ifstream data_file, error_file;
     std::ofstream output_file;
+    double chisqr;
 
+    //Reading in data
     data_file.open("/workspaces/SUPA_CPP_Labs/Exercises2023/Ex1_2/input2D_float.txt", std::ios::in);
     if (data_file.fail()) {
-        std::cout << "Cannot find file \n";
+        std::cout << "Cannot find data file \n";
         return 0;
         }
     else {
         std::cout << "File found\n";
-
-        // Takes first line and saves it as header string, then outputs
-        std::string headers;
-        data_file >> headers;
-        std::cout << "Headers of: " << headers << std::endl;
-
-        // Defines comma char to deal with CSV, and x_i, y_i for use in the loop
-        char comma = ',';
-        double x_i, y_i;
-
-        // Loads data into temporary variables, ignoring the comma, and saves into arrays
         readData(data_file, x, y, -1);
+        }
+
+    //Reading in errors
+    error_file.open("/workspaces/SUPA_CPP_Labs/Exercises2023/Ex1_2/error2D_float.txt", std::ios::in);
+    if (error_file.fail()) {
+        std::cout << "Cannot find error file \n";
+        return 0;
+        }
+    else {
+        std::cout << "File found\n";
+        readData(error_file, x_err, y_err, -1);
         }
 
     std::cout << "Would you like to print the arrays(p), or calculate and print their magnitudes(m)?\n";
@@ -71,15 +73,19 @@ int main() {
         }
     }
 
-    fit = leastSquareRegression(x,y);
+    //Least squares fit
+    fit = modelFit_ChiSquared(x,y,x_err,y_err);
 
     lobf = "y = " + std::to_string(fit[0]) + "x + " + std::to_string(fit[1]);
 
-    std::cout << "\nLine of best fit for the data is:\n" << lobf << std::endl;
+    chisqr = fit[2];
+
+    std::cout << "\nLine of best fit for the data is: " << lobf << std::endl;
+    std::cout << "The chi squared of this fit is: " << chisqr << std::endl;
 
     //Writing to file
-    output_file.open("/workspaces/SUPA_CPP_Labs/Exercises2023/Ex1_2/LOBF.txt", std::ios::out);
-    output_file << lobf;
+    output_file.open("/workspaces/SUPA_CPP_Labs/Exercises2023/Ex1_2/ModelFit.txt", std::ios::out);
+    output_file << lobf << std::endl << chisqr;
 
     std::cout << "\n\n";
     return 0;

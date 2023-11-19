@@ -13,6 +13,12 @@ void readData(std::ifstream &data_file, std::vector<double> &x, std::vector<doub
     double x_i, y_i;
     char comma;
     int line = 0;
+    // Takes first line and saves it as header string, then outputs
+    std::string headers;
+    data_file >> headers;
+    std::cout << "Headers of: " << headers << std::endl;
+
+    // Actual data values    
     while (!data_file.eof()) {
         data_file >> x_i >> comma >> y_i; 
         x.push_back(x_i);
@@ -57,17 +63,18 @@ std::vector<double> vectorMag(std::vector<double> x, std::vector<double> y) {
     return z;
 }
 
-std::vector<double> leastSquareRegression(std::vector<double> x_v, std::vector<double> y_v) {
+std::vector<double> modelFit_ChiSquared(std::vector<double> x_v, std::vector<double> y_v,
+                                            std::vector<double> x_err, std::vector<double> y_err) {
     //Loads data as x_i and y_i arrays
     //Outputs a vector with containing m and c for a y=mx+c fit
-    std::vector<double> xy_v, xx_v, fit;
-    double x, y, xy, xx, m, c;
+    std::vector<double> xy_v, xx_v, fit, exp_val;
+    double x, y, xy, xx, m, c, chisqr = 0.00;
     int N = x_v.size();
     // Calculates vectors of xy and xx in order to calculate sums later
-    for (int i = 0; i<=N-1; i++)
+    for (int i = 0; i<=N-1; i++) {
         xy_v.push_back(x_v[i]*y_v[i]);
-    for (int i = 0; i<=N-1; i++)
         xx_v.push_back(x_v[i]*x_v[i]);
+    }
     
     // calculating summations
     x = std::accumulate(x_v.begin(),x_v.end(),0);
@@ -75,10 +82,26 @@ std::vector<double> leastSquareRegression(std::vector<double> x_v, std::vector<d
     xy = std::accumulate(xy_v.begin(),xy_v.end(),0);
     xx = std::accumulate(xx_v.begin(),xx_v.end(),0);
 
+    // calculating model parameters and saving into a vector
     m = (N*xy - x*y) / (N*xx - x*x);
     c = (y - m*x) / N;
-
     fit.push_back(m);
     fit.push_back(c);
+
+    // calculating the expected values
+    for (int i = 0; i<=N-1; i++) {
+        exp_val.push_back(m*x_v[i] + c);
+        chisqr = chisqr + pow((y_v[i] - exp_val[i]),2)/pow((x_err[i]*x_err[i] + y_err[i]*y_err[i]),0.5);
+    }
+
+    fit.push_back(chisqr);
+
     return fit;
+}
+
+std::vector<double> exponentCalc(std::vector<double> x,std::vector<double> y) {
+    std::vector<double> round, exponent;
+
+    //round = std::round(y);
+    return x;
 }
