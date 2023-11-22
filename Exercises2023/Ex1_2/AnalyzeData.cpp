@@ -15,6 +15,7 @@ int main() {
     //Defines global variables
     int option, line = 0;
     std::vector<double> x,y,x_err,y_err;
+    std::vector<int> choices;
     std::string choice;
     std::ifstream data_file, error_file;
     std::ofstream output_file;
@@ -52,15 +53,19 @@ int main() {
         std::cin >> choice;
         if (choice.at(0) == 'p') {
             option = 1; //Print
+            choices.push_back(option);
         }
         else if (choice.at(0) == 'm') {
             option = 2; //Mag
+            choices.push_back(option);
         }
         else if (choice.at(0) == 'f') {
             option = 3; //Fit
+            choices.push_back(option);
         }
         else if (choice.at(0) == 'e') {
             option = 4; //Exponent
+            choices.push_back(option);
         }
         else {
             std::cout << "Don't be stupid, try again.\n";
@@ -92,52 +97,58 @@ int main() {
         }
     }
 
-    switch(option) {
-        case 1:{ // Print
-            int n;
-            std::cout << "How many lines of data would you like to print? (-1 will print all lines) ";
-            std::cin >> n;
-            std::cout << "\nX data:\n";
-            printVector(x, n);
-            std::cout << "Y data:\n";
-            printVector(y, n);
-            std::cout << std::endl;
-            break;
-        }
-        case 2:{ // Magnitudes
-            std::vector<double> z;
-            z = vectorMag(x,y);
-            std::cout << "Magnitudes of data:\n";
-            printVector(z,-1);
-            break;
-        }
-        case 3:{ // Fit and Chi Squared
-            std::vector<double> fit;
-            std::string lobf;
-            double chisqr;
+    for (int i = 0; i < choices.size(); i++) {
+        switch(choices[i]) {
+            case 1:{ // Print
+                int n;
+                std::cout << "\nPrinting\n";
+                std::cout << "How many lines of data would you like to print? (-1 will print all lines) ";
+                std::cin >> n;
+                std::cout << "\nX data:\n";
+                printVector(x, n);
+                std::cout << "Y data:\n";
+                printVector(y, n);
+                std::cout << std::endl;
+                continue;
+            }
+            case 2:{ // Magnitudes
+                std::vector<double> z;
+                std::cout << "\n Calculating magnitudes\n";
+                z = vectorMag(x,y);
+                std::cout << "Magnitudes of data:\n";
+                printVector(z,-1);
+                continue;
+            }
+            case 3:{ // Fit and Chi Squared
+                std::vector<double> fit;
+                std::string lobf;
+                double chisqr;
+                
+                std::cout << "\nPerforming fit and Chi Squared\n";
 
-            fit = modelFit_ChiSquared(x,y,x_err,y_err);
-            lobf = "y = " + std::to_string(fit[0]) + "x + " + std::to_string(fit[1]);
-            chisqr = fit[2]/(x.size()-1);
+                fit = modelFit_ChiSquared(x,y,x_err,y_err);
+                lobf = "y = " + std::to_string(fit[0]) + "x + " + std::to_string(fit[1]);
+                chisqr = fit[2]/(x.size()-1);
 
-            std::cout << "\nLine of best fit for the data is: " << lobf << std::endl;
-            std::cout << "The chi squared/NDF: " << chisqr << std::endl;
+                std::cout << "Line of best fit for the data is: " << lobf << std::endl;
+                std::cout << "The chi squared/NDF: " << chisqr << std::endl;
 
-            //Writing to file
-            output_file.open("/workspaces/SUPA_CPP_Labs/Exercises2023/Ex1_2/ModelFit.txt", std::ios::out);
-            output_file << lobf << std::endl << chisqr;
-            break;
-        }
-        case 4:{ // Exponent array
-            std::vector<double> exp;
-
-            exp = exponentCalc(x,y,0,exp);
-            std::cout << "Calculated exponent\n";
-            printVector(exp,-1);
-            break;
-        }
-        default:{ //Should never happen
-            break;
+                //Writing to file
+                output_file.open("/workspaces/SUPA_CPP_Labs/Exercises2023/Ex1_2/ModelFit.txt", std::ios::out);
+                output_file << lobf << std::endl << chisqr;
+                continue;
+            }
+            case 4:{ // Exponent array
+                std::vector<double> exp;
+                std::cout << "\nCalculating exponents\n";
+                exp = exponentCalc(x,y,0,exp);
+                std::cout << "Calculated exponent\n";
+                printVector(exp,-1);
+                continue;
+            }
+            default:{ //Should never happen
+                break;
+            }
         }
     }
 
