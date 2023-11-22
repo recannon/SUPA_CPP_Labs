@@ -11,3 +11,6 @@ std::vector<double> vectorMag(std::vector<double>, std::vector<double>);
 std::vector<double> modelFit_ChiSquared(std::vector<double>, std::vector<double>,
                                             std::vector<double>, std::vector<double>);
 std::vector<double> exponentCalc(std::vector<double>,std::vector<double>);
+std::vector<double> exponentCalc(std::vector<double>,std::vector<double>, int, std::vector<double>&);
+double performPower(double, int, double);
+

@@ -16,7 +16,6 @@ void readData(std::ifstream &data_file, std::vector<double> &x, std::vector<doub
     // Takes first line and saves it as header string, then outputs
     std::string headers;
     data_file >> headers;
-    std::cout << "Headers of: " << headers << std::endl;
 
     // Actual data values    
     while (!data_file.eof()) {
@@ -28,7 +27,6 @@ void readData(std::ifstream &data_file, std::vector<double> &x, std::vector<doub
             break;
             }
         }
-    std::cout << "Read " << line << " lines of the file." << std::endl;
 }
 
 void printVector(std::vector<double> v, int n) {
@@ -99,9 +97,30 @@ std::vector<double> modelFit_ChiSquared(std::vector<double> x_v, std::vector<dou
     return fit;
 }
 
-std::vector<double> exponentCalc(std::vector<double> x,std::vector<double> y) {
-    std::vector<double> round, exponent;
+//std::vector<double> exponentCalc(std::vector<double> x,std::vector<double> y, int i, std::vector<double> &exp) {
+//    std::vector<double> exponent;
+//    double round,power = x[i];
 
-    //round = std::round(y);
-    return x;
-}
+//    round = std::round(y);
+    
+//    exponent = performPower(x[i], power, round);
+    
+//    exp.push_back(exponent);
+
+//    if (exp.size() == x.size()) {
+//        return exp;
+//    }
+
+//    return exponentCalc(x, y, i+1);
+//}
+
+//double performPower(double a, int no, double power) {
+ //   if (no == 1) {
+ //       return power;
+ //   }
+ //   else {
+ //       power *= a;
+ //   }
+//    std::cout << power;
+//    return performPower(a, power, no-1);
+//}
