@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include <math.h>
 #include <fstream>
 #include <cstdlib>
 #include "CustomFunctions.h"
@@ -97,30 +98,34 @@ std::vector<double> modelFit_ChiSquared(std::vector<double> x_v, std::vector<dou
     return fit;
 }
 
-//std::vector<double> exponentCalc(std::vector<double> x,std::vector<double> y, int i, std::vector<double> &exp) {
-//    std::vector<double> exponent;
-//    double round,power = x[i];
+std::vector<double> exponentCalc(std::vector<double> x,std::vector<double> y, int i, std::vector<double> &exp) {
+    double rounded,exponent,power = x[i];
 
-//    round = std::round(y);
-    
-//    exponent = performPower(x[i], power, round);
-    
-//    exp.push_back(exponent);
+    rounded = std::round(y[i]);
 
-//    if (exp.size() == x.size()) {
-//        return exp;
-//    }
+    if (rounded == 0) {
+        exponent = 1;
+    }
+    else {
+        exponent = performPower(x[i], rounded, power);
+    }
 
-//    return exponentCalc(x, y, i+1);
-//}
+    exp.push_back(exponent);
 
-//double performPower(double a, int no, double power) {
- //   if (no == 1) {
- //       return power;
- //   }
- //   else {
- //       power *= a;
- //   }
-//    std::cout << power;
-//    return performPower(a, power, no-1);
-//}
+    if (exp.size() == x.size()) {
+        return exp;
+    }
+    i++;
+    return exponentCalc(x, y, i, exp);
+}
+
+double performPower(double a, int no, double power) {
+    if (no == 1) {
+        return power;
+    }
+    else {
+        power *= a;
+        no --;
+    }
+    return performPower(a, no, power);
+}

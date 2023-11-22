@@ -7,6 +7,8 @@
 #include <fstream>
 #include <cstdlib>
 #include <numeric>
+#include <math.h>
+
 #include "CustomFunctions.h"
 
 int main() {
@@ -129,8 +131,9 @@ int main() {
         case 4:{ // Exponent array
             std::vector<double> exp;
 
-            //std::cout << performPower(3,4,4);
-
+            exp = exponentCalc(x,y,0,exp);
+            std::cout << "Calculated exponent\n";
+            printVector(exp,-1);
             break;
         }
         default:{ //Should never happen
