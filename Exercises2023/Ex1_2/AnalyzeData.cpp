@@ -123,16 +123,11 @@ int main() {
                 std::vector<double> fit;
                 std::string lobf;
                 double chisqr;
-                
                 std::cout << "\nPerforming fit and Chi Squared\n";
-
                 fit = modelFit_ChiSquared(x,y,x_err,y_err);
                 lobf = "y = " + std::to_string(fit[0]) + "x + " + std::to_string(fit[1]);
                 chisqr = fit[2]/(x.size()-1);
-
-                std::cout << "Line of best fit for the data is: " << lobf << std::endl;
-                std::cout << "The chi squared/NDF: " << chisqr << std::endl;
-
+                std::cout << "Saved to file\n";
                 //Writing to file
                 output_file.open("/workspaces/SUPA_CPP_Labs/Exercises2023/Ex1_2/ModelFit.txt", std::ios::out);
                 output_file << lobf << std::endl << chisqr;
