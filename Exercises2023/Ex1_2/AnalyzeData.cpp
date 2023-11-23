@@ -19,27 +19,18 @@ int main() {
     std::string choice;
     std::ifstream data_file, error_file;
     std::ofstream output_file;
+    std::string data_path, error_path, general_path, output_path;
     bool cont;
 
+    general_path = "/workspaces/SUPA_CPP_Labs/Exercises2023/Ex1_2/";
+
     //Reading in data
-    data_file.open("/workspaces/SUPA_CPP_Labs/Exercises2023/Ex1_2/input2D_float.txt", std::ios::in);
-    if (data_file.fail()) {
-        std::cout << "Cannot find data file \n";
-        return 0;
-        }
-    else {
-        readData(data_file, x, y, -1);
-        }
+    data_path = general_path + "input2D_float.txt";
+    readData(x, y, data_path, -1);
 
     //Reading in errors
-    error_file.open("/workspaces/SUPA_CPP_Labs/Exercises2023/Ex1_2/error2D_float.txt", std::ios::in);
-    if (error_file.fail()) {
-        std::cout << "Cannot find error file \n";
-        return 0;
-        }
-    else {
-        readData(error_file, x_err, y_err, -1);
-        }
+    error_path = general_path + "error2D_float.txt";
+    readData(x_err, y_err, data_path, -1);
 
     //Asking what the user would like to do
     std::cout << "Would you like to:\nPrint the arrays? (p)\n"
@@ -47,11 +38,16 @@ int main() {
         << "Fit the data to a linear model and calculate the Chi squared? (f)\n"
         << "Calculate x^y for all values in the array? (e)\n";
 
+    //Get inputs for what they want to do (Accepts multiple inputs)
     while (true) {
-        //Ask for input to print or find mag
+        choice = "z_placeholder";
         std::cout << "p/m/f/e: ";
         std::cin >> choice;
-        if (choice.at(0) == 'p') {
+        if (choice.length() != 1) {
+            std::cout << "Don't be stupid, try again.\n";
+            continue;
+        }
+        else if (choice.at(0) == 'p') {
             option = 1; //Print
             choices.push_back(option);
         }
@@ -71,6 +67,8 @@ int main() {
             std::cout << "Don't be stupid, try again.\n";
             continue;
         }
+        choice = "z_placeholder";
+        //Do they have another instruction?
         while (true) {
             std::cout << "Would you like to do something else as well? (y/n) ";
             std::cin >> choice;
@@ -97,6 +95,7 @@ int main() {
         }
     }
 
+    // Performing instructions
     for (int i = 0; i < choices.size(); i++) {
         switch(choices[i]) {
             case 1:{ // Print
@@ -113,32 +112,35 @@ int main() {
             }
             case 2:{ // Magnitudes
                 std::vector<double> z;
+                output_path = general_path + "output_magnitudes.txt";
                 std::cout << "\n Calculating magnitudes\n";
                 z = vectorMag(x,y);
-                std::cout << "Magnitudes of data:\n";
-                printVector(z,-1);
+                writeOutput(output_path, z);
+                std::cout << "Saved to file\n";
                 continue;
             }
             case 3:{ // Fit and Chi Squared
-                std::vector<double> fit;
-                std::string lobf;
-                double chisqr;
+                std::vector<double> fit_chisqr;
+                std::string lobf, chisqr;
+                std::vector<std::string> output;
+                output_path = general_path + "output_fit-chisqr.txt";
                 std::cout << "\nPerforming fit and Chi Squared\n";
-                fit = modelFit_ChiSquared(x,y,x_err,y_err);
-                lobf = "y = " + std::to_string(fit[0]) + "x + " + std::to_string(fit[1]);
-                chisqr = fit[2]/(x.size()-1);
-                std::cout << "Saved to file\n";
+                fit_chisqr = modelFit_ChiSquared(x,y,x_err,y_err);
+                lobf = "y = " + std::to_string(fit_chisqr[0]) + "x + " + std::to_string(fit_chisqr[1]);
+                chisqr = std::to_string(fit_chisqr[2]);
+                output.push_back(lobf); output.push_back(chisqr);
                 //Writing to file
-                output_file.open("/workspaces/SUPA_CPP_Labs/Exercises2023/Ex1_2/ModelFit.txt", std::ios::out);
-                output_file << lobf << std::endl << chisqr;
+                writeOutput(output_path, output);
+                std::cout << "Saved to file\n";
                 continue;
             }
             case 4:{ // Exponent array
                 std::vector<double> exp;
+                output_path = general_path + "output_exponents.txt";
                 std::cout << "\nCalculating exponents\n";
                 exp = exponentCalc(x,y,0,exp);
-                std::cout << "Calculated exponent\n";
-                printVector(exp,-1);
+                writeOutput(output_path, exp);
+                std::cout << "Saved to file\n";
                 continue;
             }
             default:{ //Should never happen
@@ -146,10 +148,6 @@ int main() {
             }
         }
     }
-
-
-
-
 
     std::cout << "\n\n";
     return 0;

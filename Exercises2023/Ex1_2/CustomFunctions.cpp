@@ -2,31 +2,43 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
-#include <math.h>
 #include <fstream>
 #include <cstdlib>
-#include "CustomFunctions.h"
 #include <numeric>
+#include <math.h>
 
-void readData(std::ifstream &data_file, std::vector<double> &x, std::vector<double> &y, int read_lines) {
+#include "CustomFunctions.h"
+
+void readData(std::vector<double> &x, std::vector<double> &y, std::string data_path, int read_lines) {
     // Function inputs data_file, output vectors, and no of lines to read
     // Reads first {read_lines} of file and outputs as x and y vectors
     double x_i, y_i;
     char comma;
     int line = 0;
-    // Takes first line and saves it as header string, then outputs
-    std::string headers;
-    data_file >> headers;
+    
+    std::ifstream data_file(data_path);
+    if (!data_file.is_open()) {
+        std::cout << "Cannot find/open data file \n";
+        }
+    else {
+        // Takes first line and saves it as header string, then outputs
+        std::string headers;
+        data_file >> headers;
 
-    // Actual data values    
-    while (!data_file.eof()) {
-        data_file >> x_i >> comma >> y_i; 
-        x.push_back(x_i);
-        y.push_back(y_i); 
-        line++;
-        if (line == read_lines){
-            break;
+        // Actual data values    
+        while (!data_file.eof()) {
+            data_file >> x_i >> comma >> y_i; 
+            if (data_file.fail()) {
+                std::cout << "\nERROR: Stopped when a line of data could not be read in\n";
+                break;
             }
+            x.push_back(x_i);
+            y.push_back(y_i); 
+            line++;
+            if (line == read_lines){
+                break;
+               }
+           }
         }
 }
 
@@ -92,26 +104,26 @@ std::vector<double> modelFit_ChiSquared(std::vector<double> x_v, std::vector<dou
         exp_val.push_back(m*x_v[i] + c);
         chisqr = chisqr + pow((y_v[i] - exp_val[i]),2)/pow((x_err[i]*x_err[i] + y_err[i]*y_err[i]),0.5);
     }
-
-    fit.push_back(chisqr);
-
+    fit.push_back(chisqr/(x_v.size()-1));
     return fit;
 }
 
 std::vector<double> exponentCalc(std::vector<double> x,std::vector<double> y, int i, std::vector<double> &exp) {
     double rounded,exponent,power = x[i];
-
+    //Round the number from the y array
     rounded = std::round(y[i]);
-
+    //If it rounds down to zero, manually set x^y to 1
     if (rounded == 0) {
         exponent = 1;
     }
     else {
+        //Recursive function that multiplies x[i] by power(also defined as x[i]) by {rounded} times
+        // power increases in every call, x[i] does not
         exponent = performPower(x[i], rounded, power);
     }
-
+    //Add final value to array
     exp.push_back(exponent);
-
+    //If finished array, return exponent array, otherwise return recursive call on next value in the array
     if (exp.size() == x.size()) {
         return exp;
     }
@@ -120,12 +132,38 @@ std::vector<double> exponentCalc(std::vector<double> x,std::vector<double> y, in
 }
 
 double performPower(double a, int no, double power) {
+    // If number of times to multiply is now equal to one, return final value
     if (no == 1) {
         return power;
     }
-    else {
+    else { //Otherwise multiply again and return recursive function
         power *= a;
         no --;
     }
     return performPower(a, no, power);
+}
+void writeOutput(std::string output_path, std::vector<double> output) {
+    //Open output file
+    std::ofstream output_file(output_path);
+    if (!output_file.is_open()) {
+        std::cout << "Cannot open output file \n";
+        }
+    else {
+        //Writes each element to file
+        for (auto element : output) {
+                output_file << element << std::endl;
+            }
+        }
+}
+void writeOutput(std::string output_path, std::vector<std::string> output) {
+    //Open output file
+    std::ofstream output_file(output_path);
+    if (!output_file.is_open()) {
+        std::cout << "Cannot open output file \n";
+        }
+    else {
+        //Writes each element to file
+        for (auto i : output)
+                output_file << i << std::endl;
+        }
 }
