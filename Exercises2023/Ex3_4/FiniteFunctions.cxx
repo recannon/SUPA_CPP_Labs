@@ -62,8 +62,8 @@ Integration by hand (output needed to normalise function when plotting)
 ###################
 */ 
 double FiniteFunction::integrate(int Ndiv){ //private
-  //ToDo write an integrator
-  return -99;  
+  m_data = this->makeHist(m_data,Ndiv)
+  return 2;
 }
 double FiniteFunction::integral(int Ndiv) { //public
   if (Ndiv <= 0){
@@ -107,7 +107,7 @@ void FiniteFunction::printInfo(){
 
 //Hack because gnuplot-io can't read in custom functions, just scan over function and connect points with a line... 
 void FiniteFunction::plotFunction(){
-  m_function_scan = this->scanFunction(10000);
+  m_function_scan = this->scanFunction(1e4);
   m_plotfunction = true;
 }
 
@@ -162,6 +162,9 @@ std::vector< std::pair<double,double> > FiniteFunction::makeHist(std::vector<dou
   for (double point : points){
     //Get bin index (starting from 0) the point falls into using point value, range, and Nbins
     int bindex = static_cast<int>(floor((point-m_RMin)/((m_RMax-m_RMin)/(double)Nbins)));
+    if (bindex<0 || bindex>Nbins){
+      continue;
+    }
     bins[bindex]++; //weight of 1 for each data point
     norm++; //Total number of data points
   }

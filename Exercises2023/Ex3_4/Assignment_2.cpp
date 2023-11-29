@@ -10,7 +10,7 @@
 #include <math.h>
 #include <filesystem> //To check extensions in a nice way
 
-//#include "gnuplot-iostream.h"
+#include "gnuplot-iostream.h"
 #include "FiniteFunctions.h"
 #include "CustomFunctions2.h"
 
@@ -31,8 +31,8 @@ int main() {
     out_file = "test.txt";
     FiniteFunction myFit(dmin, dmax, out_file);
     
-    //FiniteFunction.plotdata(data, 10);
-    
+    myFit.plotData(data, 50);
+    myFit.plotFunction();
     
     std::cout << "\n\n";
 }
