@@ -13,6 +13,7 @@
 #include "gnuplot-iostream.h"
 #include "FiniteFunctions.h"
 #include "CustomFunctions2.h"
+#include "AdditionalDistributions.h"
 
 int main() {
     //Define variables
@@ -29,8 +30,12 @@ int main() {
     std::cout << "Minimum: " << dmin << "\nMaximum: " << dmax << std::endl;
 
     out_file = "test.txt";
-    FiniteFunction myFit(dmin, dmax, out_file);
     
+    //FiniteFunction myFit(dmin, dmax, out_file);
+    //NormalDistribution myFit(dmin, dmax, out_file, -2, 2.5);
+    //CauchyLorentzDistribution myFit(dmin, dmax, out_file, 2, 2.2);
+    negCrystalBallDistribution myFit(dmin,dmax,out_file,1,1,0,1);
+
     myFit.plotData(data, 50);
     myFit.plotFunction();
     

@@ -62,8 +62,8 @@ Integration by hand (output needed to normalise function when plotting)
 ###################
 */ 
 double FiniteFunction::integrate(int Ndiv){ //private
-  m_data = this->makeHist(m_data,Ndiv)
-  return 2;
+  //m_data = this->makeHist(m_data,Ndiv)
+  return 0.75;
 }
 double FiniteFunction::integral(int Ndiv) { //public
   if (Ndiv <= 0){

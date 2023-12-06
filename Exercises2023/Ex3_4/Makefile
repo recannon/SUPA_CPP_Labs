@@ -1,7 +1,7 @@
 CC=g++ #Name of compiler
 FLAGS=-std=c++20 -w #Compiler flags (the s makes it silent)
 TARGET=Assignment2 #Executable name
-OBJECTS=Assignment_2.o FiniteFunctions.o CustomFunctions2.o
+OBJECTS=Assignment_2.o FiniteFunctions.o CustomFunctions2.o AdditionalDistributions.o
 LIBS=-I ../../GNUplot/ -lboost_iostreams
 
 #First target in Makefile is default
@@ -18,6 +18,9 @@ FiniteFunctions.o : FiniteFunctions.cxx FiniteFunctions.h
 
 CustomFunctions2.o : CustomFunctions2.cpp CustomFunctions2.h
 	${CC} ${FLAGS} ${LIBS} -c CustomFunctions2.cpp
+
+AdditionalDistributions.o : AdditionalDistributions.cpp AdditionalDistributions.h
+	${CC} ${FLAGS} ${LIBS} -c AdditionalDistributions.cpp
 
 clean: #No targets just run shell command to rm object files and emacs backups
 	@rm -f *.o *~
