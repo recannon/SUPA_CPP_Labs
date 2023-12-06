@@ -32,12 +32,12 @@ int main() {
     out_file = "test.txt";
     
     //FiniteFunction myFit(dmin, dmax, out_file);
-    //NormalDistribution myFit(dmin, dmax, out_file, -2, 2.5);
+    NormalDistribution myFit(dmin, dmax, out_file, -2, 2);
     //CauchyLorentzDistribution myFit(dmin, dmax, out_file, 2, 2.2);
-    negCrystalBallDistribution myFit(dmin,dmax,out_file,1,1,0,1);
+    //negCrystalBallDistribution myFit(dmin,dmax,out_file,1,1,0,1);
 
     myFit.plotData(data, 50);
     myFit.plotFunction();
-    
+    std::cout << "\nThe distribution is a normal distribution with a mean of -2 and standard deviation of 2.\n";
     std::cout << "\n\n";
 }
