@@ -3,7 +3,8 @@
 #include <vector>
 #include "FiniteFunctions.h"
 #include <filesystem> //To check extensions in a nice way
-
+#include <random>
+#include <time.h>
 #include "gnuplot-iostream.h" //Needed to produce plots (not part of the course) 
 
 using std::filesystem::path;
@@ -78,6 +79,36 @@ double FiniteFunction::integral(int Ndiv) { //public
   else return m_Integral; //Don't bother re-calculating integral if Ndiv is the same as the last call
 }
 
+//Function to sample with metroplis method and output data array
+void FiniteFunction::metropolisSample(std::vector<double> &mcmc, double dmin, double dmax, int n) {
+  auto seed = time(NULL);
+  float x_i, x_p,rand_norm, A , T;
+  std::mt19937 mtEngine{static_cast<unsigned int>(seed)};
+  std::uniform_real_distribution<> flat_rand{dmin,dmax};
+  std::uniform_real_distribution<> zero_to_one{0,1};
+  x_i = flat_rand(mtEngine);
+  std::cout << "X_0 value is " << x_i << std::endl;
+  A = 2.0;
+  for (int i; i < n; i++) {
+      //Save value
+      T = zero_to_one(mtEngine);
+      if (T < A) {
+          x_p = x_i;
+          x_i = rand_norm;
+          mcmc.push_back(x_i);
+      }
+      else {
+          x_p = x_i;
+          mcmc.push_back(x_i);
+      }
+      //Calculate new value on distribution centred on x_i
+      std::normal_distribution<float> norm_rand{x_i,1};
+      rand_norm = norm_rand(mtEngine);
+      A = this->callFunction(rand_norm)/this->callFunction(x_i);
+      //std::cout << A << std::endl;
+  }
+}
+
 /*
 ###################
 //Helper functions 
@@ -114,11 +145,11 @@ void FiniteFunction::plotFunction(){
 //Transform data points into a format gnuplot can use (histogram) and set flag to enable drawing of data to output plot
 //set isdata to true (default) to plot data points in black, set to false to plot sample points in blue
 void FiniteFunction::plotData(std::vector<double> &points, int Nbins, bool isdata){
-  if (isdata){
+  if (isdata) {
     m_data = this->makeHist(points,Nbins);
     m_plotdatapoints = true;
   }
-  else{
+  else {
     m_samples = this->makeHist(points,Nbins);
     m_plotsamplepoints = true;
   }
