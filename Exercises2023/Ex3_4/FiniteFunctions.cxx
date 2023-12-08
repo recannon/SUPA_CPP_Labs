@@ -61,9 +61,8 @@ double FiniteFunction::callFunction(double x) {return this->invxsquared(x);}; //
 ###################
 Integration by hand (output needed to normalise function when plotting)
 ###################
-*/ 
+*/
 double FiniteFunction::integrate(int Ndiv){ //private
-  //m_data = this->makeHist(m_data,Ndiv)
   return 1;
 }
 double FiniteFunction::integral(int Ndiv) { //public

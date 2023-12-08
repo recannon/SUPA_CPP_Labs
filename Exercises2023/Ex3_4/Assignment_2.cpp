@@ -32,8 +32,8 @@ int main() {
 
     out_file = "test.txt";
     
-    FiniteFunction myFit(dmin, dmax, out_file);
-    //NormalDistribution myFit(dmin, dmax, out_file, -2, 2);
+    //FiniteFunction myFit(dmin, dmax, out_file);
+    NormalDistribution myFit(dmin, dmax, out_file, -2, 2);
     //CauchyLorentzDistribution myFit(dmin, dmax, out_file, 2, 2.2);
     //negCrystalBallDistribution myFit(dmin,dmax,out_file,1,1,0,1);
 
