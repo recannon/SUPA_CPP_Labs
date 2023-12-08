@@ -88,7 +88,7 @@ void FiniteFunction::metropolisSample(std::vector<double> &mcmc, double dmin, do
   x_i = flat_rand(mtEngine);
   std::cout << "X_0 value is " << x_i << std::endl;
   A = 2.0;
-  for (int i; i < n; i++) {
+  for (int i=0; i < n; i++) {
       //Save value
       T = zero_to_one(mtEngine);
       if (T < A) {
